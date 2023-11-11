@@ -1,0 +1,107 @@
+﻿@page "/"
+
+<SfSchedule TValue="AppointmentDataModel" @bind-SelectedDate="@CurrentDate"
+            Height="600px" Width="100%">
+    <ScheduleGroup Resources="@GroupData" ByGroupID="true" ByDate="true"></ScheduleGroup>
+    <ScheduleResources>
+        <ScheduleResource TValue="int" TItem="ResourceDataModel"
+                          DataSource="@TaskData" Field="GroupId" Title="Task Details"
+                          Name="Tasks" TextField="TaskName" AllowMultiple="true"
+                          IdField="TaskId" ColorField="TaskColor">
+        </ScheduleResource>
+        <ScheduleResource TItem="ResourceDataModel" TValue="int[]" DataSource="@ResourceData"
+                           GroupIDField="ResourceGroupId" Field="ResourceId"
+                          Title="Resource Name" Name="Resources" TextField="PersonName"
+                          IdField="PersonId" ColorField="PersonColor" AllowMultiple="true">
+        </ScheduleResource>
+    </ScheduleResources>
+    <ScheduleViews>
+        <ScheduleView Option="View.Day"></ScheduleView>
+        <ScheduleView Option="View.Week"></ScheduleView>
+        <ScheduleView Option="View.TimelineWeek"></ScheduleView>
+        <ScheduleView Option="View.TimelineDay"></ScheduleView>
+        <ScheduleView Option="View.Agenda"></ScheduleView>
+    </ScheduleViews>
+    <ScheduleEventSettings DataSource="@ScheduleData">
+    </ScheduleEventSettings>
+</SfSchedule>
+
+@code {
+
+    public string[] GroupData { get; set; } = { "Tasks", "Resources" };
+
+    DateTime CurrentDate = new DateTime(2021, 5, 16);
+
+
+    public class AppointmentDataModel
+    {
+        public int Id { get; set; }
+
+        public string Subject { get; set; }
+
+        public DateTime StartTime { get; set; }
+
+        public DateTime EndTime { get; set; }
+
+        public int GroupId { get; set; }
+
+        public int ResourceId { get; set; }
+    }
+
+    public class ResourceDataModel
+    {
+        public int TaskId { get; set; }
+        public string TaskName { get; set; }
+        public string TaskColor { get; set; }
+        public int PersonId { get; set; }
+        public string PersonName { get; set; }
+        public string PersonColor { get; set; }
+        public int ResourceGroupId { get; set; }
+    }
+
+    List<ResourceDataModel> ResourceData = new List<ResourceDataModel>
+    {
+        new ResourceDataModel {PersonId=1, PersonName="John", PersonColor="#ea7a57", ResourceGroupId=1},
+        new ResourceDataModel {PersonId=2, PersonName="Robert", PersonColor="#df5286", ResourceGroupId=2},
+        new ResourceDataModel {PersonId=3, PersonName="Steve", PersonColor="#865fcf", ResourceGroupId=2 }
+    };
+
+    List<ResourceDataModel> TaskData = new List<ResourceDataModel>
+    {
+        new ResourceDataModel {TaskId=1, TaskName="Development", TaskColor="#ffaa00"},
+        new ResourceDataModel {TaskId=2, TaskName="Testing", TaskColor="#f8a398"},
+        new ResourceDataModel {TaskId=3, TaskName="Support", TaskColor="#00bdae"}
+    };
+
+    List<AppointmentDataModel> ScheduleData = new List<AppointmentDataModel>
+    {
+        new AppointmentDataModel
+        {
+            Id = 1,
+            Subject = "Meeting",
+            StartTime = new DateTime(2021, 5, 17, 10, 0, 0),
+            EndTime = new DateTime(2021, 5, 17, 11, 0, 0),
+            GroupId= 1,
+            ResourceId = 1
+        },
+        new AppointmentDataModel
+        {
+            Id = 2,
+            Subject = "Test Report Validation",
+            StartTime = new DateTime(2021, 5, 19, 11, 0, 0),
+            EndTime = new DateTime(2021, 5, 19, 12, 0, 0),
+            GroupId= 2,
+            ResourceId = 2
+        },
+        new AppointmentDataModel
+        {
+            Id = 3,
+            Subject = " Bug Fixing",
+            StartTime = new DateTime(2021, 5, 21, 10, 0, 0),
+            EndTime = new DateTime(2021, 5, 21, 11, 0, 0),
+            GroupId= 2
+        }
+
+    };
+
+}
